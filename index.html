@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetingraum Buchung</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #F5F5F5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            background-color: #84BD22; /* grüner Hintergrund */
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 0;
+            color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .time-block {
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #299E8E; /* blauer Rand */
+            border-radius: 5px;
+            margin: 10px 0;
+            padding: 10px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .booked {
+            background-color: #299E8E; /* gebuchte Zeit in Blau */
+            color: white;
+        }
+        .available {
+            background-color: #84BD22; /* verfügbare Zeit in Grün */
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Meetingraum Buchungssystem</h1>
+    </header>
+    <div class="container">
+        <h2>Buchbare Zeiten</h2>
+        <div id="timeSlots">
+            <!-- Zeitblöcke werden hier dynamisch hinzugefügt -->
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Green IT Systemhaus GmbH</p>
+    </div>
+
+    <script>
+        // Zeiten von 8 bis 17 Uhr erstellen
+        const timeSlots = [];
+        for (let hour = 8; hour <= 17; hour++) {
+            timeSlots.push(`${hour}:00`);
+            timeSlots.push(`${hour}:30`);
+        }
+
+        const bookedSlots = {
+            '9:00': 'Project Management',
+            '10:30': 'Billing',
+            '12:00': 'P&C',
+            '15:00': 'Project Management',
+            // Hier können weitere gebuchte Slots hinzugefügt werden
+        };
+
+        const timeSlotsContainer = document.getElementById('timeSlots');
+
+        timeSlots.forEach(slot => {
+            const slotDiv = document.createElement('div');
+            slotDiv.className = 'time-block';
+            slotDiv.textContent = slot;
+
+            if (bookedSlots[slot]) {
+                slotDiv.classList.add('booked');
+                slotDiv.textContent += ` (Buchung durch: ${bookedSlots[slot]})`;
+            } else {
+                slotDiv.classList.add('available');
+                slotDiv.addEventListener('click', () => {
+                    const department = prompt('Bitte geben Sie Ihre Abteilung ein (z.B. Project Management, Billing, P&C):');
+                    if (department) {
+                        bookedSlots[slot] = department; // Buchung hinzufügen
+                        slotDiv.classList.add('booked');
+                        slotDiv.className = 'time-block booked';
+                        slotDiv.textContent += ` (Buchung durch: ${department})`;
+                    }
+                });
+            }
+            timeSlotsContainer.appendChild(slotDiv);
+        });
+    </script>
+</body>
+</html>
